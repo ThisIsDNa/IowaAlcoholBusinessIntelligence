@@ -40,14 +40,54 @@ Key Metrics:
 ## 2. Accessing Public Dataset in BigQuery
 We use the Iowa Liquor Sales Public Dataset available in Google BigQuery to extract relevant alcohol sales data. The dataset contains information on sales transactions, store details, and product descriptions.
 
-![Step 1 - Data Exploration](https://github.com/user-attachments/assets/799ece16-f41d-4d17-89c4-3679355536f5)
+```
+SELECT * 
+FROM `bigquery-public-data.iowa_liquor_sales.sales` 
+LIMIT 10;
+```
 
 ## 3. Creating a Target Table and Aggregating Data
 Once the dataset is accessed we create a target table, filter for only Crown Royal and Tito's Vodka, and aggregate the data to make it usable for business intelligence reporting.
 
-![Step 2 - Creating a Target Table](https://github.com/user-attachments/assets/d3c9b283-fedb-48aa-a91e-3df8bc0ff496)
+```
+CREATE OR REPLACE TABLE `bi-portfolio-spirit.iowa_spirit_sales.cleaned_sales_data` AS
+SELECT 
+    DATE(date) AS sale_date,
+    store_number,
+    store_name,
+    city,
+    county,
+    category_name,
+    item_description,
+    SUM(bottles_sold) AS total_bottles_sold,
+    SUM(sale_dollars) AS total_sales
+FROM `bigquery-public-data.iowa_liquor_sales.sales`
+WHERE sale_dollars IS NOT NULL
+GROUP BY sale_date, store_number, store_name, city, county, category_name, item_description;
+```
 
-![Step 4 - Data Aggregation](https://github.com/user-attachments/assets/4a65c94d-c331-4c38-8d42-d4ba8a6b4f52)
+```
+CREATE OR REPLACE TABLE `bi-portfolio-spirit.iowa_spirit_sales.aggregated_sales_walmart_filtered`
+AS
+SELECT
+  sale_date,
+  store_name,
+  item_description,
+  SUM(total_sales) AS total_sales,
+  COUNT(*) AS total_transactions
+FROM `bi-portfolio-spirit.iowa_spirit_sales.cleaned_sales_data`
+WHERE sale_date BETWEEN '2024-01-01' AND '2024-12-31'
+  AND TRIM(UPPER(store_name)) LIKE 'WAL-MART%'
+  AND TRIM(UPPER(item_description)) IN (
+      'CROWN ROYAL', 
+      'CROWN ROYAL REGAL APPLE', 
+      'CROWN ROYAL PEACH', 
+      'CROWN ROYAL WHISKY SOUR BLACK CHERRY COCKTAIL', 
+      'TITOS HANDMADE VODKA', 
+      'FIREBALL CINNAMON WHISKEY'
+  )
+GROUP BY sale_date, store_name, item_description;
+```
 
 ## 4. Pulling Data into Power BI
 Steps:
