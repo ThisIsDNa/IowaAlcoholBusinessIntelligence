@@ -136,6 +136,11 @@ This ensures that the Power BI dashboard is interactive and provides meaningful 
 ## Conclusion
 This project provides valuable sales insights for Wal-Mart’s alcohol sales in Iowa, focusing on Crown Royal and Tito’s Vodka. The combination of BigQuery, Power BI, and DAX enables interactive analysis and data-driven decision-making.
 
+Key Insights Delivered:”
+- Crown Royal outperforms Tito’s in rural counties, but Tito’s dominates urban Wal-Mart locations
+- Sales peaks around major holidays with notable spikes in June and December
+- One store accounted for over 15% of Crown Royal sales <- a strong candidate for focused inventory planning
+
 Future improvements may include:
 - Expanding analysis to other product categories.
 - Adding real-time data updates for better forecasting.
