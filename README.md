@@ -5,6 +5,9 @@
 This project was designed to simulate a real-world BI request from multiple stakeholders. I built it to demonstrate my ability to move from raw public datasets through to business-ready dashboards and insights through the use of SQL, Power BI, and stakeholder-aligned documentation.
 
 
+---
+
+
 ### Overview
 
 This project analyzes and visualizes alcohol sales data for Crown Royal and Tito's Vodka in Wal-Mart stores across Iowa during 2024. The insights will support key business decisions related to inventory management, sales strategy, and marketing efforts.
