@@ -1,6 +1,6 @@
 # 2024 Alcohol Sales Analysis for Wal-Mart in Iowa
 
-### Why this projec
+### Why this project
 
 This project was designed to simulate a real-world BI request from multiple stakeholders. I built it to demonstrate my ability to move from raw public datasets through to business-ready dashboards and insights through the use of SQL, Power BI, and stakeholder-aligned documentation.
 
