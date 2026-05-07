@@ -1,155 +1,251 @@
-# 2024 Alcohol Sales Analysis for Wal-Mart in Iowa
-
-### Why this project
-
-This project was designed to simulate a real-world BI request from multiple stakeholders. I built it to demonstrate my ability to move from raw public datasets through to business-ready dashboards and insights through the use of SQL, Power BI, and stakeholder-aligned documentation.
-
-
----
+2024 Iowa Alcohol Sales Analysis — Wal-Mart BI Dashboard
+Overview
+This project simulates a real-world Business Intelligence request involving multiple stakeholders, public datasets, SQL transformation pipelines, and executive-facing reporting.
+Using the Iowa Liquor Sales public dataset in Google BigQuery, I designed an end-to-end analytics workflow to analyze 2024 alcohol sales trends for Crown Royal and Tito’s Vodka across Wal-Mart locations in Iowa.
+The project demonstrates my ability to:
 
 
-### Overview
+Translate stakeholder requirements into actionable reporting solutions
 
-This project analyzes and visualizes alcohol sales data for Crown Royal and Tito's Vodka in Wal-Mart stores across Iowa during 2024. The insights will support key business decisions related to inventory management, sales strategy, and marketing efforts.
 
-### Project Workflow
-The project follows a structured workflow:
-  1. Building Business Intelligence Documentation
-  2. Accessing Public Dataset in BigQuery
-  3. Cleaning, Transforming, and Aggregating Data in BigQuery
-  4. Pulling Data into Power BI
-  5. Using DAX to Adjust Columns and Metrics in Power BI
+Build scalable SQL transformation workflows
 
-## 1. Business Intelligence Documentation
-I created a BI Documentation Report simulating and outlining stakeholder requirements, objectives, data sources, and deliverables.
 
-### Stakeholder Requirements
+Design business-ready Power BI dashboards
+
+
+Create meaningful insights from large public datasets
+
+
+Structure technical findings into clear business recommendations
+
+
+
+Project Goals
+The primary goal of this project was to simulate a realistic BI engagement from intake through delivery.
+Key objectives included:
+
+
+Analyzing sales performance across Wal-Mart locations
+
+
+Comparing product performance between Crown Royal and Tito’s Vodka
+
+
+Identifying seasonal and geographic sales trends
+
+
+Supporting inventory planning and marketing decisions through data visualization
+
+
+
+Business Scenario
+Stakeholders requested visibility into alcohol sales performance to support operational and strategic decision-making.
+Stakeholder Requirements
 Sales Managers
-  - View total alcohol sales by location to help with inventory and sales planning
-Marketing Team
-  - View % breakdown of Crown Royal vs. Tito's to help tailor marketing campaigns
+
+
+Monitor total alcohol sales by location
+
+
+Support inventory planning and regional forecasting
+
+
+Marketing Teams
+
+
+Analyze product share between Crown Royal and Tito’s Vodka
+
+
+Identify opportunities for targeted campaigns
+
+
 Business Analysts
-  - Analyze sales trends to help support forecasting and strategy
 
-### Project Requirements
-Data Source: BigQuery (Iowa Liquor Sales Dataset)
-Visualization Tool: Power BI
-Key Metrics:
-  - Total Sales by store, product, and time
-  - Sales Trends (daily, weekly, monthly)
-  - Top 10 Performing Stores
-  - Product Sales Breakdown (Crown Royal vs. Tito’s Vodka)
 
-### Deliverables
-1. Power BI dashboard displaying total sales, trends, and top-performing locations.
-2. Business Intelligence report documenting methodology and insights.
-3. User guide for navigating the Power BI dashboard.
+Track sales trends over time
 
-## 2. Accessing Public Dataset in BigQuery
-We use the Iowa Liquor Sales Public Dataset available in Google BigQuery to extract relevant alcohol sales data. The dataset contains information on sales transactions, store details, and product descriptions.
 
-```
-SELECT * 
-FROM `bigquery-public-data.iowa_liquor_sales.sales` 
-LIMIT 10;
-```
+Support forecasting and performance analysis
 
-## 3. Creating a Target Table and Aggregating Data
-Once the dataset is accessed we create a target table, filter for only Crown Royal and Tito's Vodka, and aggregate the data to make it usable for business intelligence reporting.
 
-```
-CREATE OR REPLACE TABLE `bi-portfolio-spirit.iowa_spirit_sales.cleaned_sales_data` AS
-SELECT 
-    DATE(date) AS sale_date,
-    store_number,
-    store_name,
-    city,
-    county,
-    category_name,
-    item_description,
-    SUM(bottles_sold) AS total_bottles_sold,
-    SUM(sale_dollars) AS total_sales
-FROM `bigquery-public-data.iowa_liquor_sales.sales`
-WHERE sale_dollars IS NOT NULL
-GROUP BY sale_date, store_number, store_name, city, county, category_name, item_description;
-```
 
-```
-CREATE OR REPLACE TABLE `bi-portfolio-spirit.iowa_spirit_sales.aggregated_sales_walmart_filtered`
-AS
-SELECT
-  sale_date,
-  store_name,
-  item_description,
-  SUM(total_sales) AS total_sales,
-  COUNT(*) AS total_transactions
-FROM `bi-portfolio-spirit.iowa_spirit_sales.cleaned_sales_data`
-WHERE sale_date BETWEEN '2024-01-01' AND '2024-12-31'
-  AND TRIM(UPPER(store_name)) LIKE 'WAL-MART%'
-  AND TRIM(UPPER(item_description)) IN (
-      'CROWN ROYAL', 
-      'CROWN ROYAL REGAL APPLE', 
-      'CROWN ROYAL PEACH', 
-      'CROWN ROYAL WHISKY SOUR BLACK CHERRY COCKTAIL', 
-      'TITOS HANDMADE VODKA', 
-      'FIREBALL CINNAMON WHISKEY'
-  )
-GROUP BY sale_date, store_name, item_description;
-```
+Technology Stack
+ToolPurposeGoogle BigQueryData extraction, transformation, aggregationSQLData cleaning and business logicPower BIDashboard creation and visualizationDAXKPI calculations and trend analysis
 
-## 4. Pulling Data into Power BI
-Steps:
-1. Connect Power BI to BigQuery using the Google BigQuery Connector.
-2. Import the cleaned dataset into Power BI.
-3. Ensure data types are correctly set (e.g., dates as DateTime, sales as Currency).
+Project Workflow
+1. Business Intelligence Planning
+Created BI documentation to simulate stakeholder alignment and project scoping.
+Documentation included:
 
-## 5. Using DAX to Adjust Columns and Metrics in Power BI
 
-Once the data is in Power BI, we use DAX (Data Analysis Expressions) to create calculated columns and measures for better reporting.
+Business objectives
 
-### Key DAX Calculations:
 
-Total Sales Calculation:
-```
+Stakeholder requirements
+
+
+KPI definitions
+
+
+Data source identification
+
+
+Dashboard deliverables
+
+
+
+2. Data Extraction with BigQuery
+The Iowa Liquor Sales public dataset was accessed through Google BigQuery.
+SELECT * FROM `bigquery-public-data.iowa_liquor_sales.sales`LIMIT 10;
+The dataset contains:
+
+
+sales transactions
+
+
+store information
+
+
+product descriptions
+
+
+pricing and volume metrics
+
+
+
+3. Data Cleaning & Transformation
+Data was cleaned, standardized, and aggregated into reporting-ready tables.
+Key Transformation Tasks
+
+
+Converted transaction dates into reporting-friendly formats
+
+
+Removed null sales values
+
+
+Aggregated total sales and bottle counts
+
+
+Filtered for:
+
+
+Wal-Mart locations
+
+
+Crown Royal product lines
+
+
+Tito’s Handmade Vodka
+
+
+
+
+Structured tables for Power BI ingestion
+
+
+Example Aggregation Query
+CREATE OR REPLACE TABLE `bi-portfolio-spirit.iowa_spirit_sales.aggregated_sales_walmart_filtered`ASSELECT  sale_date,  store_name,  item_description,  SUM(total_sales) AS total_sales,  COUNT(*) AS total_transactionsFROM `bi-portfolio-spirit.iowa_spirit_sales.cleaned_sales_data`WHERE sale_date BETWEEN '2024-01-01' AND '2024-12-31'  AND TRIM(UPPER(store_name)) LIKE 'WAL-MART%'GROUP BY sale_date, store_name, item_description;
+
+4. Power BI Dashboard Development
+The transformed dataset was imported into Power BI using the Google BigQuery connector.
+Dashboard features included:
+
+
+Sales trend analysis
+
+
+Product performance breakdowns
+
+
+Top-performing store identification
+
+
+Interactive filtering by location and product
+
+
+KPI visualizations for executive review
+
+
+
+5. DAX Metrics & Calculations
+Custom DAX measures were created to support trend analysis and reporting.
+Total Sales
 Total Sales = SUM('SalesData'[total_sales])
-```
+Month-over-Month Sales Change
+Sales Change % =VAR PrevMonth =    CALCULATE(        SUM('SalesData'[total_sales]),        PREVIOUSMONTH('SalesData'[sales_month])    )RETURN    IF(        NOT(ISBLANK(PrevMonth)),        (SUM('SalesData'[total_sales]) - PrevMonth) / PrevMonth,        BLANK()    )
+Product Share Breakdown
+Crown Royal % =DIVIDE(    CALCULATE(        SUM('SalesData'[total_sales]),        'SalesData'[item_description] = "Crown Royal"    ),    SUM('SalesData'[total_sales]),    0)
 
-Sales Trend Percentage Change:
-```
-Sales Change % =
-VAR PrevMonth = CALCULATE(SUM('SalesData'[total_sales]),
-        PREVIOUSMONTH('SalesData'[sales_month])
-    )
-RETURN
-    IF(NOT(ISBLANK(PrevMonth)),
-       (SUM('SalesData'[total_sales]) - PrevMonth) / PrevMonth,
-       BLANK()
-    )
-```
-
-Percentage Breakdown by Product:
-```
-Crown Royal % =
-DIVIDE(
-    CALCULATE(SUM('SalesData'[total_sales]), 'SalesData'[item_description] = "Crown Royal"),
-    SUM('SalesData'[total_sales]),
-    0
-)
-```
-
-This ensures that the Power BI dashboard is interactive and provides meaningful insights.
+Key Insights
 ![Portfolio Dashboard](https://github.com/user-attachments/assets/6422c07b-6ff9-4880-b034-c8cbc752753e)
+The analysis produced several actionable business insights:
 
 
-## Conclusion
-This project provides valuable sales insights for Wal-Mart’s alcohol sales in Iowa, focusing on Crown Royal and Tito’s Vodka. The combination of BigQuery, Power BI, and DAX enables interactive analysis and data-driven decision-making.
+Crown Royal performed more strongly in rural counties
 
-Key Insights Delivered:”
-- Crown Royal outperforms Tito’s in rural counties, but Tito’s dominates urban Wal-Mart locations
-- Sales peaks around major holidays with notable spikes in June and December
-- One store accounted for over 15% of Crown Royal sales <- a strong candidate for focused inventory planning
 
-Future improvements may include:
-- Expanding analysis to other product categories.
-- Adding real-time data updates for better forecasting.
-- Integrating with inventory management systems for automated decision support.
+Tito’s Vodka showed stronger sales in urban Wal-Mart locations
+
+
+Sales volume increased significantly around major holidays
+
+
+June and December showed the largest sales spikes
+
+
+One Wal-Mart location accounted for over 15% of Crown Royal sales, making it a strong candidate for targeted inventory planning
+
+
+
+Future Improvements
+Potential future enhancements include:
+
+
+Expanding analysis to additional alcohol categories
+
+
+Implementing near real-time data refresh pipelines
+
+
+Adding predictive forecasting models
+
+
+Integrating inventory optimization recommendations
+
+
+Automating scheduled dashboard refresh workflows
+
+
+
+What This Project Demonstrates
+This project highlights my ability to:
+
+
+Build end-to-end BI workflows
+
+
+Translate business needs into technical solutions
+
+
+Structure ambiguous requirements into actionable reporting
+
+
+Design scalable data transformation pipelines
+
+
+Communicate analytical findings clearly to stakeholders
+
+
+Combine SQL, Power BI, and DAX into business-ready analytics solutions
+
+
+
+Repository Structure
+/project-files  /sql  /powerbi  /documentation  /screenshotsREADME.md
+
+Author
+Dustin Na
+Business Analyst | Systems & Process Optimization | BI & Operational Analytics
+This project was created as part of my portfolio to demonstrate practical business intelligence, analytics, and reporting workflows using real-world public datasets.
